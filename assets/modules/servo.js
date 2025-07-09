@@ -1,5 +1,5 @@
-import { sendBLEPayload, appendLog } from "bleManager.js";
-import { showToast, playSound } from "toast.js";
+import { sendBLEPayload, appendLog } from "./bleManager.js";
+import { showToast, playSound } from "./toast.js";
 
 function format3Digit(num) {
   return num.toString().padStart(3, "0");

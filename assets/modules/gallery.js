@@ -1,6 +1,6 @@
 // gallery.js
-import { appendLog } from "bleManager.js";
-import { isCacheEnabled } from "config.js";
+import { appendLog } from "./bleManager.js";
+import { isCacheEnabled } from "./config.js";
 
 window.selectedGifMeta = null; // Metadata global animasi terpilih
 const gifPreviewCache = new Map(); // { [url]: HTMLImageElement }
@@ -10,7 +10,7 @@ let galleryData = [];
 
 async function loadGalleryData() {
   try {
-    const res = await fetch("http://localhost:5500/biled/api/gallery.json");
+    const res = await fetch("http://localhost:5500/api/gallery.json");
     if (!res.ok) throw new Error("Gagal memuat galeri");
     galleryData = await res.json();
 

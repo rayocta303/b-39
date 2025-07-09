@@ -1,6 +1,6 @@
 // license.js
-import { sendBLEPayload, readBLEData, appendLog } from "bleManager.js";
-import { detectVendor, getVendorInfo, updateVendorLogo } from "vendor.js";
+import { sendBLEPayload, readBLEData, appendLog } from "./bleManager.js";
+import { detectVendor, getVendorInfo, updateVendorLogo } from "./vendor.js";
 const nameLicense = ["No License", "Basic", "Middle", "Full"];
 
 export async function requestDeviceInfo() {
