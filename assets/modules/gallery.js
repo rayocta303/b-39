@@ -10,7 +10,7 @@ let galleryData = [];
 
 async function loadGalleryData() {
   try {
-    const res = await fetch("http://localhost:5500/api/gallery.json");
+    const res = await fetch("./api/gallery.json");
     if (!res.ok) throw new Error("Gagal memuat galeri");
     galleryData = await res.json();
 
