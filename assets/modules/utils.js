@@ -27,11 +27,12 @@ document.getElementById("fabThemeMode")?.addEventListener("click", () => {
   setTimeout(updateLogoBasedOnTheme, 100); // beri delay kecil agar class dark terpasang
 });
 
-// Container Logo
+// Container Logo shrink on scroll (mobile only)
 document.addEventListener("DOMContentLoaded", () => {
   const logoSection = document.getElementById("containerLogo");
 
-  if (window.innerWidth < 640) {
+  // Hanya untuk mobile
+  if (window.innerWidth < 640 && logoSection) {
     window.addEventListener("scroll", () => {
       const isScrolled = window.scrollY > 10;
       logoSection.classList.toggle("shrink", isScrolled);

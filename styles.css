@@ -111,31 +111,7 @@ body {
 .animate-spin {
   animation: spin 1s linear infinite;
 }
-/* Logo Container shrink mode - Desktop (tetap center) */
-@media (min-width: 640px) {
-  #containerLogo.shrink {
-    margin-top: 0;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    border-radius: 0.75rem; /* tetap ada rounded */
-  }
-
-  #containerLogo.shrink #logoWrapper {
-    justify-content: center;
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-
-  #containerLogo.shrink #vendorLogo {
-    width: 12rem; /* ukuran tetap di desktop */
-  }
-
-  #containerLogo.shrink #logoStatusDot {
-    display: none; /* dot tidak ditampilkan di desktop */
-  }
-}
-
-/* Logo Container shrink mode - Mobile (shrink ke kiri dan show dot) */
+/* Default mobile (shrink) behavior */
 @media (max-width: 639px) {
   #containerLogo.shrink {
     margin-top: 0;
@@ -151,10 +127,23 @@ body {
   }
 
   #containerLogo.shrink #vendorLogo {
-    width: 8rem;
+    width: 7rem;
   }
 
   #containerLogo.shrink #logoStatusDot {
     display: block;
+  }
+}
+
+/* Desktop tetap center */
+@media (min-width: 640px) {
+  #containerLogo.shrink #logoWrapper {
+    justify-content: center;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  #containerLogo.shrink #logoStatusDot {
+    display: none;
   }
 }
