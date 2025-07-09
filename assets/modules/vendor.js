@@ -4,31 +4,31 @@
  * Contoh input SN: SN123456789+XYZ
  * Contoh input lisensi: ABC123+XYZ
  */
-const VENDORS = [
-  {
-    code: "XYZ",
-    name: "XYZ Electronics",
-    contact: "https://wa.me/6281234567890",
-  },
-  {
-    code: "BILED",
-    name: "Lampu Biled Indonesia",
-    contact: "https://wa.me/6281111111111",
-  },
-  {
-    code: "GENERIC",
-    name: "Lampubiled.id Official",
-    contact: "https://lampubiled.id/kontak",
-  },
-];
+let VENDORS = []; // akan diisi dari API
+let vendorLoaded = false;
 
+export async function loadVendorsFromAPI(url = "./api/vendors.json") {
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+
+    if (Array.isArray(data)) {
+      VENDORS = data;
+      vendorLoaded = true;
+    } else {
+      console.warn("Vendor data tidak valid");
+    }
+  } catch (err) {
+    console.error("Gagal fetch vendor data:", err);
+  }
+}
 export function getVendorInfo(vendorCode) {
   const safeCode = vendorCode?.trim().toUpperCase();
 
   if (!safeCode) {
     return {
       code: "GENERIC",
-      name: "Vendor Tidak Dikenal",
+      name: "Lampubiled.id",
       contact: "https://lampubiled.id/kontak",
     };
   }
@@ -38,7 +38,7 @@ export function getVendorInfo(vendorCode) {
   return (
     match || {
       code: "GENERIC",
-      name: "Vendor Tidak Dikenal",
+      name: "Lampubiled.id",
       contact: "https://lampubiled.id/kontak",
     }
   );
