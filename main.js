@@ -7,7 +7,10 @@ import {
 import { setServo } from "./assets/modules/servo.js";
 import { uploadGif } from "./assets/modules/upload.js";
 import { showToast, playSound } from "./assets/modules/toast.js";
-import { updateVendorLogo } from "./assets/modules/vendor.js";
+import {
+  updateVendorLogo,
+  loadVendorsFromAPI,
+} from "./assets/modules/vendor.js";
 
 import "./assets/modules/utils.js";
 import "./assets/modules/gallery.js";
@@ -249,4 +252,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const saved = localStorage.getItem("theme");
   bottomThemeIcon.className =
     saved === "dark" ? "fas fa-sun text-lg mb-1" : "fas fa-moon text-lg mb-1";
+});
+
+document.addEventListener("DOMContentLoaded", async () => {
+  await loadVendorsFromAPI("/vendors.json");
 });
