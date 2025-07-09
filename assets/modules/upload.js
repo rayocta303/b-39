@@ -1,6 +1,6 @@
-import { sendBLEPayload, appendLog } from "./bleManager.js";
-import { showToast, playSound } from "./toast.js";
-import { showModal, hideModal } from "./modal.js";
+import { sendBLEPayload, appendLog } from "bleManager.js";
+import { showToast, playSound } from "toast.js";
+import { showModal, hideModal } from "modal.js";
 export async function uploadGif(name, side = "LEFT", byteArray) {
   const uploadBtn = document.getElementById("uploadSelectedHeaderBtn");
   const originalText = uploadBtn?.innerText || "Upload";

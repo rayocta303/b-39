@@ -1,6 +1,6 @@
 // gallery.js
-import { appendLog } from "./bleManager.js";
-import { isCacheEnabled } from "./config.js";
+import { appendLog } from "bleManager.js";
+import { isCacheEnabled } from "config.js";
 
 window.selectedGifMeta = null; // Metadata global animasi terpilih
 const gifPreviewCache = new Map(); // { [url]: HTMLImageElement }
