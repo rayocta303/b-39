@@ -1,16 +1,16 @@
-import { connectBLE, isBLEConnected } from "./assets/modules/bleManager.js";
+import { connectBLE, isBLEConnected } from "assets/modules/bleManager.js";
 import {
   requestDeviceInfo,
   submitLisensi,
   resetLisensi,
-} from "./assets/modules/license.js";
-import { setServo } from "./assets/modules/servo.js";
-import { uploadGif } from "./assets/modules/upload.js";
-import { showToast, playSound } from "./assets/modules/toast.js";
-import { updateVendorLogo } from "./assets/modules/vendor.js";
+} from "assets/modules/license.js";
+import { setServo } from "assets/modules/servo.js";
+import { uploadGif } from "assets/modules/upload.js";
+import { showToast, playSound } from "assets/modules/toast.js";
+import { updateVendorLogo } from "assets/modules/vendor.js";
 
-import "./assets/modules/utils.js";
-import "./assets/modules/gallery.js";
+import "assets/modules/utils.js";
+import "assets/modules/gallery.js";
 
 const appendLog = window.appendLog || ((msg) => console.log("[LOG]", msg));
 let deferredPrompt = null;
