@@ -1,0 +1,23 @@
+[
+  {
+    "name": "Api Merah",
+    "category": "api",
+    "image": "data/1.gif",
+    "headerLeft": "data/1a.h",
+    "headerRight": "data/1b.h"
+  },
+  {
+    "name": "Kilau Putih",
+    "category": "kilau",
+    "image": "data/2.gif",
+    "headerLeft": "assets/header/kilau_a.h",
+    "headerRight": "assets/header/kilau_b.h"
+  },
+  {
+    "name": "Bendera",
+    "category": "bendera",
+    "image": "assets/gif/merahputih.gif",
+    "headerLeft": "assets/header/merahputih_a.h",
+    "headerRight": "assets/header/merahputih_b.h"
+  }
+]

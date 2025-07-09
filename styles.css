@@ -1,0 +1,160 @@
+/* ============================
+  Custom Scrollbar (dark/light)
+============================ */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgba(100, 100, 100, 0.3);
+  border-radius: 4px;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* ============================
+  Log Panel Auto Scroll (BLE)
+============================ */
+#bleLog p:last-child {
+  animation: scroll-to-bottom 0.3s ease-in;
+}
+@keyframes scroll-to-bottom {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================
+  Transitions for Theme Toggle
+============================ */
+html,
+body {
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* ============================
+  Text Selection
+============================ */
+::selection {
+  background-color: #1e40af;
+  color: white;
+}
+.dark ::selection {
+  background-color: #f59e0b;
+  color: black;
+}
+
+/* ============================
+  Responsive Helpers (Optional)
+============================ */
+@media (max-width: 640px) {
+  button {
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
+  }
+
+  h2,
+  h3 {
+    font-size: 1.1rem;
+  }
+}
+
+/* Marquee  */
+@keyframes marquee {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.animate-marquee {
+  display: inline-block;
+  animation: marquee 8s linear infinite;
+}
+/* Optional custom animation */
+@keyframes slideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+/* Logo Container shrink mode - Desktop (tetap center) */
+@media (min-width: 640px) {
+  #containerLogo.shrink {
+    margin-top: 0;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-radius: 0.75rem; /* tetap ada rounded */
+  }
+
+  #containerLogo.shrink #logoWrapper {
+    justify-content: center;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  #containerLogo.shrink #vendorLogo {
+    width: 12rem; /* ukuran tetap di desktop */
+  }
+
+  #containerLogo.shrink #logoStatusDot {
+    display: none; /* dot tidak ditampilkan di desktop */
+  }
+}
+
+/* Logo Container shrink mode - Mobile (shrink ke kiri dan show dot) */
+@media (max-width: 639px) {
+  #containerLogo.shrink {
+    margin-top: 0;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    border-radius: 0;
+  }
+
+  #containerLogo.shrink #logoWrapper {
+    justify-content: space-between;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  #containerLogo.shrink #vendorLogo {
+    width: 8rem;
+  }
+
+  #containerLogo.shrink #logoStatusDot {
+    display: block;
+  }
+}
