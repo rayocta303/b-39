@@ -1,0 +1,1689 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wiki</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <style>
+      .code-block {
+        background: #1e293b;
+        color: #e2e8f0;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        overflow-x: auto;
+        font-family: "Courier New", monospace;
+        font-size: 0.875rem;
+        line-height: 1.5;
+      }
+      .sidebar {
+        position: sticky;
+        top: 2rem;
+        max-height: calc(100vh - 4rem);
+        overflow-y: auto;
+      }
+      .content-section {
+        scroll-margin-top: 2rem;
+      }
+      .module-card {
+        transition: all 0.3s ease;
+        border-left: 4px solid transparent;
+      }
+      .module-card:hover {
+        border-left-color: #3b82f6;
+        transform: translateX(4px);
+      }
+      .function-item {
+        background: #f8fafc;
+        border-left: 3px solid #e2e8f0;
+        transition: all 0.2s ease;
+      }
+      .function-item:hover {
+        border-left-color: #10b981;
+        background: #f0fdf4;
+      }
+      .dark .function-item {
+        background: #1e293b;
+        border-left-color: #475569;
+      }
+      .dark .function-item:hover {
+        background: #0f172a;
+        border-left-color: #10b981;
+      }
+      .api-endpoint {
+        background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 0.25rem;
+        font-family: monospace;
+        font-weight: bold;
+      }
+      .status-badge {
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+      .status-active {
+        background: #dcfce7;
+        color: #166534;
+      }
+      .status-development {
+        background: #fef3c7;
+        color: #92400e;
+      }
+      .status-deprecated {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+    <!-- Header -->
+    <header
+      class="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center py-4">
+          <div class="flex items-center space-x-3">
+            <i class="fas fa-book text-blue-600 text-2xl"></i>
+            <div>
+              <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+                Wiki
+              </h1>
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                Developer Documentation & API Reference
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center space-x-2">
+            <span class="status-badge status-active">v2.0</span>
+            <button
+              id="themeToggle"
+              class="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600"
+            >
+              <i class="fas fa-moon dark:hidden"></i>
+              <i class="fas fa-sun hidden dark:inline"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="flex flex-col lg:flex-row gap-8">
+        <!-- Sidebar Navigation -->
+        <nav class="lg:w-64 sidebar">
+          <div
+            class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4"
+          >
+            <h2 class="font-semibold text-gray-900 dark:text-white mb-4">
+              Table of Contents
+            </h2>
+            <ul class="space-y-2 text-sm">
+              <li>
+                <a
+                  href="#overview"
+                  class="text-blue-600 dark:text-blue-400 hover:underline"
+                  >Overview</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#architecture"
+                  class="text-blue-600 dark:text-blue-400 hover:underline"
+                  >Architecture</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#modules"
+                  class="text-blue-600 dark:text-blue-400 hover:underline"
+                  >Core Modules</a
+                >
+              </li>
+              <li class="ml-4">
+                <ul class="space-y-1">
+                  <li>
+                    <a
+                      href="#ble-manager"
+                      class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400"
+                      >BLE Manager</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      href="#gallery"
+                      class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400"
+                      >Gallery</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      href="#upload"
+                      class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400"
+                      >Upload</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      href="#license"
+                      class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400"
+                      >License</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      href="#vendor"
+                      class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400"
+                      >Vendor</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      href="#cache"
+                      class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400"
+                      >Cache</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      href="#config"
+                      class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400"
+                      >Config</a
+                    >
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <a
+                  href="#api"
+                  class="text-blue-600 dark:text-blue-400 hover:underline"
+                  >API Reference</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#data-flow"
+                  class="text-blue-600 dark:text-blue-400 hover:underline"
+                  >Data Flow</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#debugging"
+                  class="text-blue-600 dark:text-blue-400 hover:underline"
+                  >Debugging</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#deployment"
+                  class="text-blue-600 dark:text-blue-400 hover:underline"
+                  >Deployment</a
+                >
+              </li>
+            </ul>
+          </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="flex-1">
+          <!-- Overview Section -->
+          <section id="overview" class="content-section mb-12">
+            <div
+              class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6"
+            >
+              <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+                <i class="fas fa-info-circle text-blue-600 mr-2"></i>
+                Overview
+              </h2>
+              <div class="prose dark:prose-invert max-w-none">
+                <p class="text-lg text-gray-600 dark:text-gray-300 mb-6">
+                  Biled App adalah Progressive Web Application (PWA) yang
+                  dirancang untuk mengelola dan mengupload animasi LED melalui
+                  koneksi Bluetooth Low Energy (BLE). Aplikasi ini mendukung
+                  sistem multi-vendor, manajemen lisensi, dan caching canggih
+                  untuk performa optimal.
+                </p>
+
+                <div
+                  class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6"
+                >
+                  <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+                    <h3
+                      class="font-semibold text-blue-900 dark:text-blue-100 mb-2"
+                    >
+                      <i class="fas fa-bluetooth text-blue-600 mr-2"></i>
+                      BLE Communication
+                    </h3>
+                    <p class="text-sm text-blue-700 dark:text-blue-300">
+                      Komunikasi real-time dengan perangkat LED menggunakan Web
+                      Bluetooth API
+                    </p>
+                  </div>
+
+                  <div class="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
+                    <h3
+                      class="font-semibold text-green-900 dark:text-green-100 mb-2"
+                    >
+                      <i class="fas fa-images text-green-600 mr-2"></i>
+                      Animation Gallery
+                    </h3>
+                    <p class="text-sm text-green-700 dark:text-green-300">
+                      Galeri animasi dengan sistem filter berdasarkan lisensi
+                      dan vendor
+                    </p>
+                  </div>
+
+                  <div
+                    class="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg"
+                  >
+                    <h3
+                      class="font-semibold text-purple-900 dark:text-purple-100 mb-2"
+                    >
+                      <i class="fas fa-mobile-alt text-purple-600 mr-2"></i>
+                      PWA Ready
+                    </h3>
+                    <p class="text-sm text-purple-700 dark:text-purple-300">
+                      Dapat diinstall di perangkat mobile dengan dukungan
+                      offline
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Architecture Section -->
+          <section id="architecture" class="content-section mb-12">
+            <div
+              class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6"
+            >
+              <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">
+                <i class="fas fa-sitemap text-blue-600 mr-2"></i>
+                Architecture
+              </h2>
+
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div>
+                  <h3 class="text-xl font-semibold mb-4">Modular Structure</h3>
+                  <div class="space-y-3">
+                    <div
+                      class="flex items-center space-x-3 p-3 bg-gray-50 dark:bg-gray-700 rounded"
+                    >
+                      <i class="fas fa-layer-group text-blue-600"></i>
+                      <div>
+                        <div class="font-medium">Presentation Layer</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-400">
+                          HTML, CSS, UI Components
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="flex items-center space-x-3 p-3 bg-gray-50 dark:bg-gray-700 rounded"
+                    >
+                      <i class="fas fa-cogs text-green-600"></i>
+                      <div>
+                        <div class="font-medium">Business Logic</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-400">
+                          Core modules for BLE, Gallery, Upload
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="flex items-center space-x-3 p-3 bg-gray-50 dark:bg-gray-700 rounded"
+                    >
+                      <i class="fas fa-database text-purple-600"></i>
+                      <div>
+                        <div class="font-medium">Data Layer</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-400">
+                          IndexedDB Cache, API Integration
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 class="text-xl font-semibold mb-4">Data Flow</h3>
+                  <div class="code-block">
+                    <pre>
+User Interaction
+    ↓
+UI Components (main.js)
+    ↓
+Module Functions
+    ↓
+BLE Communication / API Calls
+    ↓
+Cache Layer (IndexedDB)
+    ↓
+Device / Server Response
+    ↓
+UI Update & Feedback</pre
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Core Modules Section -->
+          <section id="modules" class="content-section mb-12">
+            <div
+              class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6"
+            >
+              <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">
+                <i class="fas fa-puzzle-piece text-blue-600 mr-2"></i>
+                Core Modules
+              </h2>
+
+              <!-- BLE Manager Module -->
+              <div
+                id="ble-manager"
+                class="module-card bg-gray-50 dark:bg-gray-700 p-6 rounded-lg mb-8"
+              >
+                <h3 class="text-2xl font-semibold mb-4 flex items-center">
+                  <i class="fas fa-bluetooth text-blue-600 mr-3"></i>
+                  BLE Manager
+                  <span class="status-badge status-active ml-3">Core</span>
+                </h3>
+                <p class="text-gray-600 dark:text-gray-300 mb-4">
+                  Mengelola semua komunikasi Bluetooth Low Energy dengan
+                  perangkat LED. Module ini menggunakan Web Bluetooth API untuk
+                  koneksi dan pertukaran data.
+                </p>
+
+                <div class="space-y-4">
+                  <div class="function-item p-4 rounded">
+                    <h4
+                      class="font-semibold text-green-600 dark:text-green-400"
+                    >
+                      connectBLE()
+                    </h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                      Membuat koneksi ke perangkat BLE
+                    </p>
+                    <div class="code-block">
+                      <pre>
+async function connectBLE() {
+  // Mencari dan menghubungkan ke perangkat BLE
+  // Mengembalikan true jika berhasil, false jika gagal
+  return boolean;
+}</pre
+                      >
+                    </div>
+                  </div>
+
+                  <div class="function-item p-4 rounded">
+                    <h4
+                      class="font-semibold text-green-600 dark:text-green-400"
+                    >
+                      sendBLEPayload(payload)
+                    </h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                      Mengirim data ke perangkat terhubung
+                    </p>
+                    <div class="code-block">
+                      <pre>
+await sendBLEPayload("info");           // Request device info
+await sendBLEPayload("servo045135");     // Set servo position
+await sendBLEPayload(byteArray);         // Send binary data</pre
+                      >
+                    </div>
+                  </div>
+
+                  <div class="function-item p-4 rounded">
+                    <h4
+                      class="font-semibold text-green-600 dark:text-green-400"
+                    >
+                      readBLEData()
+                    </h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                      Membaca response dari perangkat
+                    </p>
+                    <div class="code-block">
+                      <pre>
+const response = await readBLEData();
+// Format response: "jenis|tipeLisensi|serialNumber"
+// Contoh: "0|2|SN123456+VENDOR"</pre
+                      >
+                    </div>
+                  </div>
+
+                  <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded">
+                    <h5
+                      class="font-semibold text-blue-900 dark:text-blue-100 mb-2"
+                    >
+                      Key Constants
+                    </h5>
+                    <div class="text-sm space-y-1">
+                      <div>
+                        <code>SERVICE_UUID</code>:
+                        "6e400001-b5a3-f393-e0a9-e50e24dcca9e"
+                      </div>
+                      <div>
+                        <code>CHARACTERISTIC_UUID</code>:
+                        "6e400003-b5a3-f393-e0a9-e50e24dcca9e"
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Gallery Module -->
+              <div
+                id="gallery"
+                class="module-card bg-gray-50 dark:bg-gray-700 p-6 rounded-lg mb-8"
+              >
+                <h3 class="text-2xl font-semibold mb-4 flex items-center">
+                  <i class="fas fa-images text-purple-600 mr-3"></i>
+                  Gallery Manager
+                  <span class="status-badge status-active ml-3">Core</span>
+                </h3>
+                <p class="text-gray-600 dark:text-gray-300 mb-4">
+                  Mengelola galeri animasi dengan sistem filtering berdasarkan
+                  lisensi, vendor, dan kepemilikan. Mendukung lazy loading dan
+                  caching canggih.
+                </p>
+
+                <div class="space-y-4">
+                  <div class="function-item p-4 rounded">
+                    <h4
+                      class="font-semibold text-green-600 dark:text-green-400"
+                    >
+                      loadGalleryData(filters)
+                    </h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                      Memuat data animasi dari API dengan filter opsional
+                    </p>
+                    <div class="code-block">
+                      <pre>
+// Load dengan filter spesifik
+await loadGalleryData({
+  sn: "SN123456",
+  license: "02", 
+  vendor: "VENDOR01"
+});
+
+// Load semua data
+await loadGalleryData();</pre
+                      >
+                    </div>
+                  </div>
+
+                  <div class="function-item p-4 rounded">
+                    <h4
+                      class="font-semibold text-green-600 dark:text-green-400"
+                    >
+                      updateUserContext(sn, vendor, license)
+                    </h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                      Update konteks user untuk filtering
+                    </p>
+                    <div class="code-block">
+                      <pre>
+// Update context setelah device connect
+updateUserContext("SN123456", "VENDOR01", "02");
+
+// Otomatis me-refresh gallery dengan filter baru</pre
+                      >
+                    </div>
+                  </div>
+
+                  <div class="function-item p-4 rounded">
+                    <h4
+                      class="font-semibold text-green-600 dark:text-green-400"
+                    >
+                      selectGif(gif, isDefault)
+                    </h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                      Memilih animasi untuk diupload
+                    </p>
+                    <div class="code-block">
+                      <pre>
+// Pilih animasi dengan logging
+selectGif(animationObject, false);
+
+// Pilih default tanpa logging
+selectGif(animationObject, true);</pre
+                      >
+                    </div>
+                  </div>
+
+                  <div class="bg-purple-50 dark:bg-purple-900/20 p-4 rounded">
+                    <h5
+                      class="font-semibold text-purple-900 dark:text-purple-100 mb-2"
+                    >
+                      Filtering Logic
+                    </h5>
+                    <div class="text-sm space-y-2">
+                      <div>
+                        <strong>License Access:</strong> User dengan license
+                        "02" dapat akses animasi dengan licenseType "01" dan
+                        "02"
+                      </div>
+                      <div>
+                        <strong>Ownership:</strong> Animasi dengan serialNumber
+                        atau vendorCode yang match dengan user
+                      </div>
+                      <div>
+                        <strong>Public:</strong> Animasi tanpa batasan
+                        license/ownership ditampilkan untuk semua user
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Upload Module -->
+              <div
+                id="upload"
+                class="module-card bg-gray-50 dark:bg-gray-700 p-6 rounded-lg mb-8"
+              >
+                <h3 class="text-2xl font-semibold mb-4 flex items-center">
+                  <i class="fas fa-upload text-green-600 mr-3"></i>
+                  Upload Manager
+                  <span class="status-badge status-active ml-3">Core</span>
+                </h3>
+                <p class="text-gray-600 dark:text-gray-300 mb-4">
+                  Menangani proses upload file header animasi ke perangkat BLE
+                  dengan progress tracking dan validasi file.
+                </p>
+
+                <div class="space-y-4">
+                  <div class="function-item p-4 rounded">
+                    <h4
+                      class="font-semibold text-green-600 dark:text-green-400"
+                    >
+                      uploadGif(name, side, byteArray)
+                    </h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                      Function utama untuk upload animasi
+                    </p>
+                    <div class="code-block">
+                      <pre>
+const content = document.getElementById("uploadHeaderContentLeft").value;
+const byteArray = new TextEncoder().encode(content);
+
+await uploadGif("animation.h", "LEFT", byteArray);
+// atau
+await uploadGif("animation.h", "RIGHT", byteArray);</pre
+                      >
+                    </div>
+                  </div>
+
+                  <div class="bg-green-50 dark:bg-green-900/20 p-4 rounded">
+                    <h5
+                      class="font-semibold text-green-900 dark:text-green-100 mb-2"
+                    >
+                      Upload Process
+                    </h5>
+                    <div class="text-sm space-y-2">
+                      <div class="flex items-center space-x-2">
+                        <span
+                          class="w-6 h-6 bg-green-600 text-white rounded-full text-xs flex items-center justify-center"
+                          >1</span
+                        >
+                        <span
+                          >Validasi konten file (cek #define dan PROGMEM)</span
+                        >
+                      </div>
+                      <div class="flex items-center space-x-2">
+                        <span
+                          class="w-6 h-6 bg-green-600 text-white rounded-full text-xs flex items-center justify-center"
+                          >2</span
+                        >
+                        <span>Kirim start command (awala/awalb)</span>
+                      </div>
+                      <div class="flex items-center space-x-2">
+                        <span
+                          class="w-6 h-6 bg-green-600 text-white rounded-full text-xs flex items-center justify-center"
+                          >3</span
+                        >
+                        <span>Upload data dalam chunk 512 bytes</span>
+                      </div>
+                      <div class="flex items-center space-x-2">
+                        <span
+                          class="w-6 h-6 bg-green-600 text-white rounded-full text-xs flex items-center justify-center"
+                          >4</span
+                        >
+                        <span>Kirim end command (akhira/akhirb)</span>
+                      </div>
+                      <div class="flex items-center space-x-2">
+                        <span
+                          class="w-6 h-6 bg-green-600 text-white rounded-full text-xs flex items-center justify-center"
+                          >5</span
+                        >
+                        <span>Update progress bar dan feedback</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded">
+                    <h5
+                      class="font-semibold text-yellow-900 dark:text-yellow-100 mb-2"
+                    >
+                      File Validation
+                    </h5>
+                    <div class="text-sm space-y-1">
+                      <div>• File harus mengandung keyword "#define"</div>
+                      <div>• File harus mengandung keyword "PROGMEM"</div>
+                      <div>• Minimum 10 karakter konten</div>
+                      <div>• Maximum 512 bytes per chunk</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- License Module -->
+              <div
+                id="license"
+                class="module-card bg-gray-50 dark:bg-gray-700 p-6 rounded-lg mb-8"
+              >
+                <h3 class="text-2xl font-semibold mb-4 flex items-center">
+                  <i class="fas fa-key text-yellow-600 mr-3"></i>
+                  License Manager
+                  <span class="status-badge status-active ml-3">Core</span>
+                </h3>
+                <p class="text-gray-600 dark:text-gray-300 mb-4">
+                  Mengelola lisensi perangkat, deteksi vendor, dan update
+                  konteks user berdasarkan informasi perangkat.
+                </p>
+
+                <div class="space-y-4">
+                  <div class="function-item p-4 rounded">
+                    <h4
+                      class="font-semibold text-green-600 dark:text-green-400"
+                    >
+                      requestDeviceInfo()
+                    </h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                      Mengambil informasi perangkat dan status lisensi
+                    </p>
+                    <div class="code-block">
+                      <pre>
+await requestDeviceInfo();
+
+// Response format: "jenis|tipeLisensi|serialNumber"
+// Contoh: "0|2|SN123456+VENDOR01"</pre
+                      >
+                    </div>
+                  </div>
+
+                  <div class="function-item p-4 rounded">
+                    <h4
+                      class="font-semibold text-green-600 dark:text-green-400"
+                    >
+                      submitLisensi(code)
+                    </h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                      Aktivasi lisensi dengan kode yang diberikan
+                    </p>
+                    <div class="code-block">
+                      <pre>
+await submitLisensi("LICENSE-CODE-123+VENDOR");
+
+// Otomatis update device info setelah aktivasi berhasil</pre
+                      >
+                    </div>
+                  </div>
+
+                  <div class="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded">
+                    <h5
+                      class="font-semibold text-yellow-900 dark:text-yellow-100 mb-2"
+                    >
+                      License Types
+                    </h5>
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                      <div>
+                        <div class="font-medium">00 - No License</div>
+                        <div class="text-gray-600 dark:text-gray-400">
+                          Akses terbatas, animasi publik saja
+                        </div>
+                      </div>
+                      <div>
+                        <div class="font-medium">01 - Basic License</div>
+                        <div class="text-gray-600 dark:text-gray-400">
+                          Akses animasi basic + publik
+                        </div>
+                      </div>
+                      <div>
+                        <div class="font-medium">02 - Standard License</div>
+                        <div class="text-gray-600 dark:text-gray-400">
+                          Akses animasi standard + basic + publik
+                        </div>
+                      </div>
+                      <div>
+                        <div class="font-medium">03 - Full License</div>
+                        <div class="text-gray-600 dark:text-gray-400">
+                          Akses semua animasi
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Vendor Module -->
+              <div
+                id="vendor"
+                class="module-card bg-gray-50 dark:bg-gray-700 p-6 rounded-lg mb-8"
+              >
+                <h3 class="text-2xl font-semibold mb-4 flex items-center">
+                  <i class="fas fa-building text-indigo-600 mr-3"></i>
+                  Vendor Manager
+                  <span class="status-badge status-active ml-3">Core</span>
+                </h3>
+                <p class="text-gray-600 dark:text-gray-300 mb-4">
+                  Mengelola sistem multi-vendor dengan branding khusus, logo,
+                  dan kontak informasi untuk setiap vendor.
+                </p>
+
+                <div class="space-y-4">
+                  <div class="function-item p-4 rounded">
+                    <h4
+                      class="font-semibold text-green-600 dark:text-green-400"
+                    >
+                      detectVendor({serialNumber, lisensiCode})
+                    </h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                      Mendeteksi vendor dari serial number atau kode lisensi
+                    </p>
+                    <div class="code-block">
+                      <pre>
+// Deteksi dari serial number
+const vendor = detectVendor({
+  serialNumber: "SN123456+VENDOR01",
+  lisensiCode: null
+});
+
+// Deteksi dari kode lisensi
+const vendor = detectVendor({
+  serialNumber: "SN123456",
+  lisensiCode: "LICENSE123+VENDOR01"
+});</pre
+                      >
+                    </div>
+                  </div>
+
+                  <div class="function-item p-4 rounded">
+                    <h4
+                      class="font-semibold text-green-600 dark:text-green-400"
+                    >
+                      updateVendorLogo(vendorCode)
+                    </h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                      Update logo berdasarkan vendor dengan theme awareness
+                    </p>
+                    <div class="code-block">
+                      <pre>
+// Update logo vendor dengan efek tema
+updateVendorLogo("VENDOR01");
+
+// Fallback ke GENERIC jika vendor tidak ditemukan
+updateVendorLogo("UNKNOWN"); // -> logo GENERIC</pre
+                      >
+                    </div>
+                  </div>
+
+                  <div class="bg-indigo-50 dark:bg-indigo-900/20 p-4 rounded">
+                    <h5
+                      class="font-semibold text-indigo-900 dark:text-indigo-100 mb-2"
+                    >
+                      Vendor Detection Logic
+                    </h5>
+                    <div class="text-sm space-y-2">
+                      <div>
+                        <strong>Serial Format:</strong> SN123456+VENDOR →
+                        Extract "VENDOR"
+                      </div>
+                      <div>
+                        <strong>License Format:</strong> CODE123+VENDOR →
+                        Extract "VENDOR"
+                      </div>
+                      <div>
+                        <strong>Fallback:</strong> Jika tidak ditemukan →
+                        "GENERIC"
+                      </div>
+                      <div>
+                        <strong>Logo Path:</strong>
+                        assets/logo/vendors/{VENDOR}.png
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Cache Module -->
+              <div
+                id="cache"
+                class="module-card bg-gray-50 dark:bg-gray-700 p-6 rounded-lg mb-8"
+              >
+                <h3 class="text-2xl font-semibold mb-4 flex items-center">
+                  <i class="fas fa-database text-red-600 mr-3"></i>
+                  Cache Manager
+                  <span class="status-badge status-active ml-3"
+                    >Performance</span
+                  >
+                </h3>
+                <p class="text-gray-600 dark:text-gray-300 mb-4">
+                  Sistem caching canggih menggunakan IndexedDB untuk menyimpan
+                  animasi dan header files dengan dukungan offline.
+                </p>
+
+                <div class="space-y-4">
+                  <div class="function-item p-4 rounded">
+                    <h4
+                      class="font-semibold text-green-600 dark:text-green-400"
+                    >
+                      getCachedAnimation(url)
+                    </h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                      Mengambil animasi dari cache atau download jika diperlukan
+                    </p>
+                    <div class="code-block">
+                      <pre>
+// Ambil dari cache atau download
+const animationUrl = await getCachedAnimation('/data/1.gif');
+
+// Menggunakan blob URL untuk performa optimal
+img.src = animationUrl;</pre
+                      >
+                    </div>
+                  </div>
+
+                  <div class="function-item p-4 rounded">
+                    <h4
+                      class="font-semibold text-green-600 dark:text-green-400"
+                    >
+                      preloadAssets(galleryData)
+                    </h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                      Preload semua assets galeri untuk akses offline
+                    </p>
+                    <div class="code-block">
+                      <pre>
+// Preload dalam background
+await preloadAssets(galleryData);
+
+// Load dalam chunk untuk mencegah overload browser</pre
+                      >
+                    </div>
+                  </div>
+
+                  <div class="bg-red-50 dark:bg-red-900/20 p-4 rounded">
+                    <h5
+                      class="font-semibold text-red-900 dark:text-red-100 mb-2"
+                    >
+                      Cache Features
+                    </h5>
+                    <div class="text-sm space-y-1">
+                      <div>
+                        • <strong>Smart Invalidation:</strong> Cek Last-Modified
+                        header untuk update
+                      </div>
+                      <div>
+                        • <strong>Blob URL Management:</strong> Efficient memory
+                        usage untuk images
+                      </div>
+                      <div>
+                        • <strong>Chunked Loading:</strong> Load assets dalam
+                        batch untuk performa
+                      </div>
+                      <div>
+                        • <strong>Size Monitoring:</strong> Track cache size dan
+                        cleanup otomatis
+                      </div>
+                      <div>
+                        • <strong>Offline Support:</strong> Fallback ke cache
+                        saat offline
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Config Module -->
+              <div
+                id="config"
+                class="module-card bg-gray-50 dark:bg-gray-700 p-6 rounded-lg mb-8"
+              >
+                <h3 class="text-2xl font-semibold mb-4 flex items-center">
+                  <i class="fas fa-cog text-orange-600 mr-3"></i>
+                  Config Manager
+                  <span class="status-badge status-active ml-3">System</span>
+                </h3>
+                <p class="text-gray-600 dark:text-gray-300 mb-4">
+                  Mengelola konfigurasi aplikasi, environment switching, dan
+                  sistem debugging yang komprehensif.
+                </p>
+
+                <div class="space-y-4">
+                  <div class="function-item p-4 rounded">
+                    <h4
+                      class="font-semibold text-green-600 dark:text-green-400"
+                    >
+                      setApiEnvironment(env)
+                    </h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                      Switch antara development dan production mode
+                    </p>
+                    <div class="code-block">
+                      <pre>
+// Development mode - menggunakan JSON files
+setApiEnvironment('development');
+
+// Production mode - menggunakan PHP APIs
+setApiEnvironment('production');</pre
+                      >
+                    </div>
+                  </div>
+
+                  <div class="function-item p-4 rounded">
+                    <h4
+                      class="font-semibold text-green-600 dark:text-green-400"
+                    >
+                      debugLog(type, message, data)
+                    </h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                      Conditional logging berdasarkan debug settings
+                    </p>
+                    <div class="code-block">
+                      <pre>
+// API call logging
+debugLog('api', 'Loading gallery data', { count: 10 });
+
+// Cache operation logging  
+debugLog('cache', 'Cache hit for animation', url);
+
+// Filter operation logging
+debugLog('filter', 'Applied filters', filterObject);</pre
+                      >
+                    </div>
+                  </div>
+
+                  <div class="bg-orange-50 dark:bg-orange-900/20 p-4 rounded">
+                    <h5
+                      class="font-semibold text-orange-900 dark:text-orange-100 mb-2"
+                    >
+                      Environment Configuration
+                    </h5>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                      <div>
+                        <div class="font-medium mb-2">Development Mode</div>
+                        <div class="space-y-1 text-gray-600 dark:text-gray-400">
+                          <div>• API: /api/gallery.json</div>
+                          <div>• No server-side filtering</div>
+                          <div>• Static file serving</div>
+                          <div>• Local development</div>
+                        </div>
+                      </div>
+                      <div>
+                        <div class="font-medium mb-2">Production Mode</div>
+                        <div class="space-y-1 text-gray-600 dark:text-gray-400">
+                          <div>• API: /api/gallery.php</div>
+                          <div>• Server-side filtering</div>
+                          <div>• Dynamic responses</div>
+                          <div>• Production deployment</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- API Reference Section -->
+          <section id="api" class="content-section mb-12">
+            <div
+              class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6"
+            >
+              <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">
+                <i class="fas fa-code text-blue-600 mr-2"></i>
+                API Reference
+              </h2>
+
+              <div class="space-y-6">
+                <!-- Gallery API -->
+                <div
+                  class="border border-gray-200 dark:border-gray-600 rounded-lg p-4"
+                >
+                  <h3 class="text-xl font-semibold mb-3">Gallery API</h3>
+
+                  <div class="space-y-4">
+                    <div>
+                      <h4 class="font-semibold mb-2">Development Endpoint</h4>
+                      <div class="api-endpoint">GET /api/gallery.json</div>
+                      <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                        Static JSON file dengan semua data animasi. Tidak
+                        mendukung filtering.
+                      </p>
+                    </div>
+
+                    <div>
+                      <h4 class="font-semibold mb-2">Production Endpoint</h4>
+                      <div class="api-endpoint">GET /api/gallery.php</div>
+                      <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                        Dynamic PHP endpoint dengan server-side filtering.
+                      </p>
+
+                      <div class="mt-3">
+                        <h5 class="font-medium mb-2">Query Parameters:</h5>
+                        <div
+                          class="bg-gray-50 dark:bg-gray-700 p-3 rounded text-sm"
+                        >
+                          <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                            <div><code>sn</code> - Filter by serial number</div>
+                            <div>
+                              <code>license</code> - Filter by license type
+                            </div>
+                            <div>
+                              <code>vendor</code> - Filter by vendor code
+                            </div>
+                            <div>
+                              <code>category</code> - Filter by category
+                            </div>
+                            <div><code>debug</code> - Enable debug info</div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="mt-3">
+                        <h5 class="font-medium mb-2">Response Format:</h5>
+                        <div class="code-block">
+                          <pre>
+{
+  "success": true,
+  "data": [
+    {
+      "name": "Animation Name",
+      "category": "Category",
+      "image": "/path/to/image.gif",
+      "headerLeft": "/path/to/left.h",
+      "headerRight": "/path/to/right.h",
+      "licenseType": "02",
+      "vendorCode": "VENDOR01",
+      "serialNumber": "SN123456"
+    }
+  ],
+  "debug": {
+    "query_params": {...},
+    "filters_applied": {...}
+  }
+}</pre
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Vendors API -->
+                <div
+                  class="border border-gray-200 dark:border-gray-600 rounded-lg p-4"
+                >
+                  <h3 class="text-xl font-semibold mb-3">Vendors API</h3>
+
+                  <div class="space-y-4">
+                    <div>
+                      <div class="api-endpoint">GET /api/vendors.json</div>
+                      <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                        Data vendor untuk branding dan kontak informasi.
+                      </p>
+
+                      <div class="mt-3">
+                        <h5 class="font-medium mb-2">Response Format:</h5>
+                        <div class="code-block">
+                          <pre>
+[
+  {
+    "code": "VENDOR01",
+    "name": "Vendor Name",
+    "contact": "https://wa.me/1234567890"
+  },
+  {
+    "code": "GENERIC",
+    "name": "Lampubiled.id",
+    "contact": "https://lampubiled.id/kontak"
+  }
+]</pre
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Data Flow Section -->
+          <section id="data-flow" class="content-section mb-12">
+            <div
+              class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6"
+            >
+              <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">
+                <i class="fas fa-sitemap text-blue-600 mr-2"></i>
+                Data Flow
+              </h2>
+
+              <div class="space-y-8">
+                <!-- Application Initialization -->
+                <div>
+                  <h3 class="text-xl font-semibold mb-4">
+                    1. Application Initialization
+                  </h3>
+                  <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+                    <div class="code-block">
+                      <pre>
+Load vendors → Initialize cache → Setup PWA → Load gallery data
+    ↓
+Apply default filters → Render skeleton → Load first animation</pre
+                      >
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Device Connection Flow -->
+                <div>
+                  <h3 class="text-xl font-semibold mb-4">
+                    2. Device Connection Flow
+                  </h3>
+                  <div class="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
+                    <div class="code-block">
+                      <pre>
+User clicks Connect → BLE scan → Device selection → Connection established
+    ↓
+Send "info" command → Read device response → Parse SN + License + Vendor
+    ↓
+Update vendor logo → Update gallery context → Filter animations → Update UI</pre
+                      >
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Animation Selection Flow -->
+                <div>
+                  <h3 class="text-xl font-semibold mb-4">
+                    3. Animation Selection Flow
+                  </h3>
+                  <div
+                    class="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg"
+                  >
+                    <div class="code-block">
+                      <pre>
+User clicks animation → Check license access → Load header files from cache/server
+    ↓
+Update preview GIF → Update debug info → Enable upload button</pre
+                      >
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Upload Flow -->
+                <div>
+                  <h3 class="text-xl font-semibold mb-4">4. Upload Flow</h3>
+                  <div class="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg">
+                    <div class="code-block">
+                      <pre>
+User clicks Upload → Validate file content → Show progress modal
+    ↓
+Send start command → Upload in 512-byte chunks → Update progress bar
+    ↓
+Send end command → Show success message → Reset UI</pre
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Debugging Section -->
+          <section id="debugging" class="content-section mb-12">
+            <div
+              class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6"
+            >
+              <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">
+                <i class="fas fa-bug text-blue-600 mr-2"></i>
+                Debugging Guide
+              </h2>
+
+              <div class="space-y-6">
+                <!-- Debug Panel -->
+                <div>
+                  <h3 class="text-xl font-semibold mb-4">Debug Panel</h3>
+                  <p class="text-gray-600 dark:text-gray-300 mb-4">
+                    Debug panel dapat diakses melalui beberapa cara:
+                  </p>
+                  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded">
+                      <h4
+                        class="font-semibold text-blue-900 dark:text-blue-100"
+                      >
+                        Desktop
+                      </h4>
+                      <p class="text-sm text-blue-700 dark:text-blue-300">
+                        FAB Debug Button
+                      </p>
+                    </div>
+                    <div class="bg-green-50 dark:bg-green-900/20 p-4 rounded">
+                      <h4
+                        class="font-semibold text-green-900 dark:text-green-100"
+                      >
+                        Mobile
+                      </h4>
+                      <p class="text-sm text-green-700 dark:text-green-300">
+                        Bottom Toolbar
+                      </p>
+                    </div>
+                    <div class="bg-purple-50 dark:bg-purple-900/20 p-4 rounded">
+                      <h4
+                        class="font-semibold text-purple-900 dark:text-purple-100"
+                      >
+                        Keyboard
+                      </h4>
+                      <p class="text-sm text-purple-700 dark:text-purple-300">
+                        Ctrl + D
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Debug Information -->
+                <div>
+                  <h3 class="text-xl font-semibold mb-4">Debug Information</h3>
+                  <div class="space-y-4">
+                    <div
+                      class="border border-gray-200 dark:border-gray-600 rounded p-4"
+                    >
+                      <h4 class="font-semibold mb-2">Device Information</h4>
+                      <ul
+                        class="text-sm text-gray-600 dark:text-gray-400 space-y-1"
+                      >
+                        <li>• Serial Number & License Status</li>
+                        <li>• Vendor Detection & Branding</li>
+                        <li>• Connection Status & Response Times</li>
+                        <li>• Last BLE Response & Commands</li>
+                      </ul>
+                    </div>
+
+                    <div
+                      class="border border-gray-200 dark:border-gray-600 rounded p-4"
+                    >
+                      <h4 class="font-semibold mb-2">Gallery Context</h4>
+                      <ul
+                        class="text-sm text-gray-600 dark:text-gray-400 space-y-1"
+                      >
+                        <li>• Current Filter Settings</li>
+                        <li>• Total vs Filtered Item Counts</li>
+                        <li>• License Access Permissions</li>
+                        <li>• Ownership & Vendor Matching</li>
+                      </ul>
+                    </div>
+
+                    <div
+                      class="border border-gray-200 dark:border-gray-600 rounded p-4"
+                    >
+                      <h4 class="font-semibold mb-2">File Information</h4>
+                      <ul
+                        class="text-sm text-gray-600 dark:text-gray-400 space-y-1"
+                      >
+                        <li>• Selected Animation Details</li>
+                        <li>• Header File Sizes & Content Preview</li>
+                        <li>• Cache Status & Performance</li>
+                        <li>• Upload Side Selection</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Console Logging -->
+                <div>
+                  <h3 class="text-xl font-semibold mb-4">Console Logging</h3>
+                  <div class="code-block">
+                    <pre>
+// Enable specific debug categories
+setDebugOption('showApiCalls', true);
+setDebugOption('showCacheInfo', true);
+setDebugOption('showFilterInfo', true);
+
+// Use conditional logging
+debugLog('api', 'Loading gallery data', { count: 10 });
+debugLog('cache', 'Cache miss for', url);
+debugLog('filter', 'Applied filters', filters);</pre
+                    >
+                  </div>
+                </div>
+
+                <!-- Common Issues -->
+                <div>
+                  <h3 class="text-xl font-semibold mb-4">
+                    Common Issues & Solutions
+                  </h3>
+                  <div class="space-y-4">
+                    <div class="bg-red-50 dark:bg-red-900/20 p-4 rounded">
+                      <h4
+                        class="font-semibold text-red-900 dark:text-red-100 mb-2"
+                      >
+                        BLE Connection Failed
+                      </h4>
+                      <ul
+                        class="text-sm text-red-700 dark:text-red-300 space-y-1"
+                      >
+                        <li>• Check if device is in pairing mode</li>
+                        <li>• Verify browser supports Web Bluetooth</li>
+                        <li>• Ensure HTTPS connection for BLE access</li>
+                        <li>• Check device UUID in console logs</li>
+                      </ul>
+                    </div>
+
+                    <div class="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded">
+                      <h4
+                        class="font-semibold text-yellow-900 dark:text-yellow-100 mb-2"
+                      >
+                        Gallery Not Loading
+                      </h4>
+                      <ul
+                        class="text-sm text-yellow-700 dark:text-yellow-300 space-y-1"
+                      >
+                        <li>• Check API environment setting</li>
+                        <li>• Verify JSON file format</li>
+                        <li>• Clear cache and reload</li>
+                        <li>• Check network connectivity</li>
+                      </ul>
+                    </div>
+
+                    <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded">
+                      <h4
+                        class="font-semibold text-blue-900 dark:text-blue-100 mb-2"
+                      >
+                        Upload Issues
+                      </h4>
+                      <ul
+                        class="text-sm text-blue-700 dark:text-blue-300 space-y-1"
+                      >
+                        <li>• Validate header file content</li>
+                        <li>• Check file size limits</li>
+                        <li>• Verify BLE connection stability</li>
+                        <li>• Monitor chunk upload progress</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Deployment Section -->
+          <section id="deployment" class="content-section mb-12">
+            <div
+              class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6"
+            >
+              <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">
+                <i class="fas fa-rocket text-blue-600 mr-2"></i>
+                Deployment Guide
+              </h2>
+
+              <div class="space-y-6">
+                <!-- Replit Deployment -->
+                <div>
+                  <h3 class="text-xl font-semibold mb-4">Replit Deployment</h3>
+                  <p class="text-gray-600 dark:text-gray-300 mb-4">
+                    Aplikasi ini dirancang khusus untuk deployment di Replit
+                    dengan konfigurasi otomatis.
+                  </p>
+
+                  <div class="space-y-4">
+                    <div class="bg-green-50 dark:bg-green-900/20 p-4 rounded">
+                      <h4
+                        class="font-semibold text-green-900 dark:text-green-100 mb-2"
+                      >
+                        Development Server
+                      </h4>
+                      <div class="code-block">
+                        <pre>
+# Start development server
+python -m http.server 5000
+
+# Access at:
+# Local: http://localhost:5000
+# Network: http://0.0.0.0:5000</pre
+                        >
+                      </div>
+                    </div>
+
+                    <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded">
+                      <h4
+                        class="font-semibold text-blue-900 dark:text-blue-100 mb-2"
+                      >
+                        Production Deployment
+                      </h4>
+                      <ul
+                        class="text-sm text-blue-700 dark:text-blue-300 space-y-1"
+                      >
+                        <li>• Static files served via Python HTTP server</li>
+                        <li>• PWA features work automatically</li>
+                        <li>• Service worker handles caching</li>
+                        <li>• Automatic HTTPS in production</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Environment Configuration -->
+                <div>
+                  <h3 class="text-xl font-semibold mb-4">
+                    Environment Configuration
+                  </h3>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div
+                      class="border border-gray-200 dark:border-gray-600 rounded p-4"
+                    >
+                      <h4 class="font-semibold mb-3">Development</h4>
+                      <div class="space-y-2 text-sm">
+                        <div>• API Environment: JSON files</div>
+                        <div>• Debug Mode: Enabled</div>
+                        <div>• Cache Strategy: Development</div>
+                        <div>• Logging: Verbose</div>
+                      </div>
+                    </div>
+
+                    <div
+                      class="border border-gray-200 dark:border-gray-600 rounded p-4"
+                    >
+                      <h4 class="font-semibold mb-3">Production</h4>
+                      <div class="space-y-2 text-sm">
+                        <div>• API Environment: PHP endpoints</div>
+                        <div>• Debug Mode: Configurable</div>
+                        <div>• Cache Strategy: Aggressive</div>
+                        <div>• Logging: Essential only</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- PWA Configuration -->
+                <div>
+                  <h3 class="text-xl font-semibold mb-4">PWA Configuration</h3>
+                  <div class="space-y-4">
+                    <div class="bg-purple-50 dark:bg-purple-900/20 p-4 rounded">
+                      <h4
+                        class="font-semibold text-purple-900 dark:text-purple-100 mb-2"
+                      >
+                        Service Worker
+                      </h4>
+                      <ul
+                        class="text-sm text-purple-700 dark:text-purple-300 space-y-1"
+                      >
+                        <li>• Cache-first strategy for static assets</li>
+                        <li>• Network-first for API calls</li>
+                        <li>• Automatic cache updates</li>
+                        <li>• Offline functionality</li>
+                      </ul>
+                    </div>
+
+                    <div class="bg-indigo-50 dark:bg-indigo-900/20 p-4 rounded">
+                      <h4
+                        class="font-semibold text-indigo-900 dark:text-indigo-100 mb-2"
+                      >
+                        Manifest Configuration
+                      </h4>
+                      <ul
+                        class="text-sm text-indigo-700 dark:text-indigo-300 space-y-1"
+                      >
+                        <li>• App name and branding</li>
+                        <li>• Icon sets for all devices</li>
+                        <li>• Display mode and orientation</li>
+                        <li>• Theme colors</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Performance Optimization -->
+                <div>
+                  <h3 class="text-xl font-semibold mb-4">
+                    Performance Optimization
+                  </h3>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <h4 class="font-semibold mb-3">Loading Optimizations</h4>
+                      <ul
+                        class="text-sm text-gray-600 dark:text-gray-400 space-y-1"
+                      >
+                        <li>• Lazy loading for gallery images</li>
+                        <li>• Skeleton placeholders</li>
+                        <li>• Staggered asset loading</li>
+                        <li>• Progressive enhancement</li>
+                      </ul>
+                    </div>
+
+                    <div>
+                      <h4 class="font-semibold mb-3">Caching Strategy</h4>
+                      <ul
+                        class="text-sm text-gray-600 dark:text-gray-400 space-y-1"
+                      >
+                        <li>• IndexedDB for large assets</li>
+                        <li>• Service Worker for static files</li>
+                        <li>• Memory cache for frequent access</li>
+                        <li>• Smart cache invalidation</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer
+      class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 mt-12"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="text-center">
+          <p class="text-gray-600 dark:text-gray-400">
+            Developer Wiki -
+            <a
+              href="https://lampubiled.id"
+              class="text-blue-600 dark:text-blue-400 hover:underline"
+              >Lampubiled.id</a
+            >
+          </p>
+          <p class="text-sm text-gray-500 dark:text-gray-500 mt-2">
+            Last updated: <span id="lastUpdated"></span>
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Theme toggle functionality
+      const themeToggle = document.getElementById("themeToggle");
+      const html = document.documentElement;
+
+      // Check for saved theme
+      const savedTheme = localStorage.getItem("theme");
+      if (savedTheme === "dark") {
+        html.classList.add("dark");
+      }
+
+      themeToggle.addEventListener("click", () => {
+        const isDark = html.classList.toggle("dark");
+        localStorage.setItem("theme", isDark ? "dark" : "light");
+      });
+
+      // Smooth scrolling for navigation links
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute("href"));
+          if (target) {
+            target.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+          }
+        });
+      });
+
+      // Set last updated date
+      document.getElementById("lastUpdated").textContent =
+        new Date().toLocaleDateString("id-ID");
+
+      // Highlight current section in navigation
+      const observerOptions = {
+        root: null,
+        rootMargin: "-50px 0px -50px 0px",
+        threshold: 0.1,
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Remove active class from all nav links
+            document.querySelectorAll("nav a").forEach((link) => {
+              link.classList.remove(
+                "font-semibold",
+                "text-blue-600",
+                "dark:text-blue-400"
+              );
+              link.classList.add("text-gray-600", "dark:text-gray-400");
+            });
+
+            // Add active class to current section link
+            const currentLink = document.querySelector(
+              `nav a[href="#${entry.target.id}"]`
+            );
+            if (currentLink) {
+              currentLink.classList.add(
+                "font-semibold",
+                "text-blue-600",
+                "dark:text-blue-400"
+              );
+              currentLink.classList.remove(
+                "text-gray-600",
+                "dark:text-gray-400"
+              );
+            }
+          }
+        });
+      }, observerOptions);
+
+      // Observe all content sections
+      document.querySelectorAll(".content-section").forEach((section) => {
+        observer.observe(section);
+      });
+    </script>
+  </body>
+</html>
