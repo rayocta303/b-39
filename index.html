@@ -509,7 +509,7 @@
     <!-- Modal Galeri -->
     <div
       id="galleryModal"
-      class="fixed h-100 p-4 inset-0 backdrop-blur-sm bg-black/50 z-50 flex items-center justify-center hidden"
+      class="fixed inset-0 flex items-center justify-center p-4 backdrop-blur-sm bg-black/50 z-50 hidden"
     >
       <div
         class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 w-full max-w-3xl max-h-[90vh] overflow-y-auto"
@@ -527,25 +527,31 @@
         </div>
 
         <!-- Filter kategori -->
-        <div class="mb-4">
+        <div class="mb-4 items-center sm:space-x-2">
           <select
             id="categoryFilter"
-            class="w-full sm:w-auto px-3 py-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm text-gray-800 dark:text-white"
+            class="w-full px-3 py-2 mt-2 sm:mt-0 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm text-gray-800 dark:text-white"
           >
             <option value="all">Semua Kategori</option>
-            <option value="api">Api</option>
-            <option value="bendera">Bendera</option>
-            <option value="kilau">Kilau</option>
+            <!-- Categories will be populated here -->
           </select>
         </div>
 
-        <!-- Grid galeri -->
-        <div
-          id="galleryList"
-          class="grid grid-cols-2 sm:grid-cols-4 gap-4"
-        ></div>
+        <!-- Galeri Container -->
+        <div class="relative mt-4">
+          <!-- Grid galeri -->
+          <div id="galleryContainer">
+            <div
+              id="galleryList"
+              class="grid grid-cols-2 sm:grid-cols-4 gap-4"
+            ></div>
+          </div>
+        </div>
+
+        <!-- Gallery End -->
       </div>
     </div>
+
     <!-- Toast Container -->
     <div
       id="toastContainer"
