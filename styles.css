@@ -73,6 +73,62 @@ body {
   cursor: not-allowed;
 }
 
+/* ============================
+  GIF Preview Responsive
+============================ */
+.gif-preview-container {
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.gif-preview-image {
+  max-width: 100%;
+  height: auto;
+  max-height: 70vh;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+  .gif-preview-image {
+    max-height: 50vh;
+    width: 100%;
+  }
+  
+  .gif-preview-container {
+    padding: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .gif-preview-image {
+    max-height: 40vh;
+  }
+}
+
+/* ============================
+  Gallery Grid Responsive
+============================ */
+#galleryList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1rem;
+}
+
+@media (max-width: 640px) {
+  #galleryList {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  #galleryList {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 0.5rem;
+  }
+}
+
 #loadMoreButton:hover:not(:disabled) {
   background-color: #3b82f6;
 }
@@ -158,4 +214,52 @@ body {
   #containerLogo.shrink #logoStatusDot {
     display: none;
   }
+}
+
+/* styles.css */
+.animate-marquee {
+  animation: marquee 10s linear infinite;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+/* Skeleton loader styles */
+.skeleton-item {
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.skeleton-image {
+  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 2s infinite;
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.dark .skeleton-image {
+  background: linear-gradient(90deg, #4b5563 25%, #374151 50%, #4b5563 75%);
+  background-size: 200% 100%;
 }

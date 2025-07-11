@@ -45,12 +45,29 @@ export async function uploadGif(name, side = "LEFT", byteArray) {
   const bar = document.getElementById("uploadProgressBar");
   const fill = document.getElementById("uploadProgressFill");
   const text = document.getElementById("uploadProgressText");
+  const details = document.getElementById("uploadProgressDetails");
+  const totalSizeEl = document.getElementById("uploadTotalSize");
+  const currentProgressEl = document.getElementById("uploadCurrentProgress");
+  const totalProgressEl = document.getElementById("uploadTotalProgress");
+  const currentChunkEl = document.getElementById("uploadCurrentChunk");
+  const totalChunksEl = document.getElementById("uploadTotalChunks");
 
   if (bar && fill && text) {
     bar.classList.remove("hidden");
     text.classList.remove("hidden");
+    details?.classList.remove("hidden");
     fill.style.width = "0%";
     text.textContent = "0%";
+    
+    // Initialize progress details
+    const chunkSize = 512;
+    const totalChunks = Math.ceil(byteArray.length / chunkSize);
+    
+    totalSizeEl && (totalSizeEl.textContent = `${byteArray.length} bytes`);
+    totalProgressEl && (totalProgressEl.textContent = `${byteArray.length} bytes`);
+    totalChunksEl && (totalChunksEl.textContent = totalChunks.toString());
+    currentProgressEl && (currentProgressEl.textContent = "0 bytes");
+    currentChunkEl && (currentChunkEl.textContent = "0");
   }
 
   try {
@@ -63,13 +80,18 @@ export async function uploadGif(name, side = "LEFT", byteArray) {
       await new Promise((r) => setTimeout(r, 10));
       await sendBLEPayload(chunk);
 
-      const progress = Math.floor(
-        ((i + chunk.length) / byteArray.length) * 100
-      );
+      const currentBytes = i + chunk.length;
+      const progress = Math.floor((currentBytes / byteArray.length) * 100);
+      const currentChunkNumber = Math.floor(i / chunkSize) + 1;
+      
       if (fill && text) {
         fill.style.width = progress + "%";
         text.textContent = progress + "%";
       }
+      
+      // Update detailed progress
+      currentProgressEl && (currentProgressEl.textContent = `${currentBytes} bytes`);
+      currentChunkEl && (currentChunkEl.textContent = currentChunkNumber.toString());
     }
 
     await sendBLEPayload(suffix);
@@ -88,6 +110,7 @@ export async function uploadGif(name, side = "LEFT", byteArray) {
     if (bar && fill && text) {
       //   bar.classList.add("hidden");
       text.classList.add("hidden");
+      details?.classList.add("hidden");
       fill.style.width = "0%";
       text.textContent = "";
     }

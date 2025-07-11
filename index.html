@@ -90,6 +90,14 @@
       </a>
 
       <button
+        id="mobileNavDebug"
+        class="flex flex-col items-center justify-center w-16 h-14 text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition"
+      >
+        <i class="fas fa-bug text-xl mb-1"></i>
+        <span class="text-xs leading-none">Debug</span>
+      </button>
+
+      <button
         id="bottomThemeToggle"
         class="flex flex-col items-center justify-center w-16 h-14 text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition"
       >
@@ -102,14 +110,6 @@
       id="fabGroup"
       class="fixed hidden bottom-4 md:block right-4 z-50 flex flex-col items-end gap-3"
     >
-      <!-- Tombol Install PWA -->
-      <button
-        id="installAppBtn"
-        class="hidden bg-indigo-600 text-white px-4 py-2 rounded"
-      >
-        Install Aplikasi
-      </button>
-
       <!-- FAB WhatsApp -->
       <a
         href="https://wa.me/6281234567890"
@@ -131,6 +131,24 @@
           />
         </svg>
       </a>
+
+      <!-- FAB Install App -->
+      <button
+        id="installAppBtn"
+        class="hidden shadow-lg rounded-full w-12 h-12 flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 text-white text-xl transition mb-2"
+        aria-label="Install App"
+      >
+        <i class="fas fa-download"></i>
+      </button>
+
+      <!-- FAB Debug -->
+      <button
+        id="fabDebug"
+        class="hidden shadow-lg rounded-full w-12 h-12 flex items-center justify-center bg-gray-600 dark:bg-gray-500 hover:bg-gray-700 dark:hover:bg-gray-400 text-white text-xl transition mb-2"
+        aria-label="Toggle Debug"
+      >
+        <i class="fas fa-bug"></i>
+      </button>
 
       <!-- FAB Theme Mode -->
       <button
@@ -285,6 +303,14 @@
                 id="uploadProgressText"
                 class="text-sm font-medium text-center text-indigo-600 dark:text-indigo-300"
               ></p>
+              <div
+                id="uploadProgressDetails"
+                class="text-xs text-center text-gray-600 dark:text-gray-400 space-y-1 hidden"
+              >
+                <p>Total Size: <span id="uploadTotalSize">0 bytes</span></p>
+                <p>Progress: <span id="uploadCurrentProgress">0 bytes</span> / <span id="uploadTotalProgress">0 bytes</span></p>
+                <p>Chunks: <span id="uploadCurrentChunk">0</span> / <span id="uploadTotalChunks">0</span></p>
+              </div>
             </div>
           </div>
         </div>
@@ -292,6 +318,164 @@
         <!-- Hidden textarea untuk header -->
         <textarea id="uploadHeaderContentLeft" class="hidden"></textarea>
         <textarea id="uploadHeaderContentRight" class="hidden"></textarea>
+      </section>
+
+      <!-- Debug Info Card -->
+      <section
+        id="debugInfo"
+        class="bg-gray-100 dark:bg-gray-800 rounded-xl shadow-md"
+      >
+        <div class="flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-700">
+          <h2 class="text-lg font-bold text-gray-800 dark:text-white flex items-center">
+            <i class="fas fa-bug mr-2"></i>
+            Debug Information
+          </h2>
+          <button
+            id="toggleDebugBtn"
+            class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm transition flex items-center"
+          >
+            <i id="debugToggleIcon" class="fas fa-chevron-down mr-1"></i>
+            <span id="debugToggleText">Show Debug</span>
+          </button>
+        </div>
+
+        <div id="debugContent" class="p-4 space-y-4 hidden">
+          <!-- Device Information -->
+          <div>
+            <h3 class="font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center">
+              <i class="fas fa-microchip mr-2"></i>
+              Device Information
+            </h3>
+            <div class="bg-white dark:bg-gray-700 p-3 rounded border text-sm space-y-2">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                <div>
+                  <span class="font-medium text-gray-600 dark:text-gray-400">Serial Number:</span>
+                  <span id="deviceSerial" class="ml-2 text-gray-800 dark:text-white">Not connected</span>
+                </div>
+                <div>
+                  <span class="font-medium text-gray-600 dark:text-gray-400">License Type:</span>
+                  <span id="deviceLicense" class="ml-2 text-gray-800 dark:text-white">Unknown</span>
+                </div>
+                <div>
+                  <span class="font-medium text-gray-600 dark:text-gray-400">License Name:</span>
+                  <span id="deviceLicenseName" class="ml-2 text-gray-800 dark:text-white">-</span>
+                </div>
+                <div>
+                  <span class="font-medium text-gray-600 dark:text-gray-400">Vendor Code:</span>
+                  <span id="deviceVendor" class="ml-2 text-gray-800 dark:text-white">Not detected</span>
+                </div>
+                <div>
+                  <span class="font-medium text-gray-600 dark:text-gray-400">Vendor Name:</span>
+                  <span id="deviceVendorName" class="ml-2 text-gray-800 dark:text-white">-</span>
+                </div>
+                <div>
+                  <span class="font-medium text-gray-600 dark:text-gray-400">Connection Status:</span>
+                  <span id="deviceConnection" class="ml-2 text-red-500">Disconnected</span>
+                </div>
+                <div>
+                  <span class="font-medium text-gray-600 dark:text-gray-400">Device Type:</span>
+                  <span id="deviceType" class="ml-2 text-gray-800 dark:text-white">Unknown</span>
+                </div>
+                <div>
+                  <span class="font-medium text-gray-600 dark:text-gray-400">Firmware Version:</span>
+                  <span id="deviceFirmware" class="ml-2 text-gray-800 dark:text-white">-</span>
+                </div>
+                <div>
+                  <span class="font-medium text-gray-600 dark:text-gray-400">Last Response:</span>
+                  <span id="deviceLastResponse" class="ml-2 text-gray-800 dark:text-white font-mono text-xs">-</span>
+                </div>
+                <div>
+                  <span class="font-medium text-gray-600 dark:text-gray-400">Response Time:</span>
+                  <span id="deviceResponseTime" class="ml-2 text-gray-800 dark:text-white">-</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Gallery Context -->
+          <div>
+            <h3 class="font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center">
+              <i class="fas fa-filter mr-2"></i>
+              Gallery Context
+            </h3>
+            <div class="bg-white dark:bg-gray-700 p-3 rounded border text-sm space-y-2">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                <div>
+                  <span class="font-medium text-gray-600 dark:text-gray-400">User Serial:</span>
+                  <span id="contextSerial" class="ml-2 text-gray-800 dark:text-white">-</span>
+                </div>
+                <div>
+                  <span class="font-medium text-gray-600 dark:text-gray-400">User Vendor:</span>
+                  <span id="contextVendor" class="ml-2 text-gray-800 dark:text-white">-</span>
+                </div>
+                <div>
+                  <span class="font-medium text-gray-600 dark:text-gray-400">User License:</span>
+                  <span id="contextLicense" class="ml-2 text-gray-800 dark:text-white">-</span>
+                </div>
+                <div>
+                  <span class="font-medium text-gray-600 dark:text-gray-400">Filter Category:</span>
+                  <span id="contextCategory" class="ml-2 text-gray-800 dark:text-white">All</span>
+                </div>
+                <div>
+                  <span class="font-medium text-gray-600 dark:text-gray-400">Total Items:</span>
+                  <span id="contextTotal" class="ml-2 text-gray-800 dark:text-white">0</span>
+                </div>
+                <div>
+                  <span class="font-medium text-gray-600 dark:text-gray-400">Filtered Items:</span>
+                  <span id="contextFiltered" class="ml-2 text-gray-800 dark:text-white">0</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- File Information -->
+          <div>
+            <h3 class="font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center">
+              <i class="fas fa-file mr-2"></i>
+              File Information
+            </h3>
+            <div
+              id="fileInfo"
+              class="bg-white dark:bg-gray-700 p-3 rounded border text-sm"
+            >
+              <p class="text-gray-600 dark:text-gray-400">
+                No file selected
+              </p>
+            </div>
+          </div>
+
+          <!-- Selected Data -->
+          <div>
+            <h3 class="font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center">
+              <i class="fas fa-database mr-2"></i>
+              Selected Data
+            </h3>
+            <div
+              id="selectedData"
+              class="bg-white dark:bg-gray-700 p-3 rounded border text-sm"
+            >
+              <p class="text-gray-600 dark:text-gray-400">
+                No data selected
+              </p>
+            </div>
+          </div>
+
+          <!-- GIF Preview -->
+          <div>
+            <h3 class="font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center">
+              <i class="fas fa-image mr-2"></i>
+              GIF Preview
+            </h3>
+            <div
+              id="gifPreview"
+              class="bg-white dark:bg-gray-700 p-3 rounded border text-center"
+            >
+              <p class="text-gray-600 dark:text-gray-400 text-sm">
+                No GIF selected
+              </p>
+            </div>
+          </div>
+        </div>
       </section>
 
       <!-- Kontrol Servo -->
@@ -474,7 +658,7 @@
         class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-5 border border-gray-200 dark:border-gray-700 hidden"
       >
         <h2 class="text-lg font-semibold text-gray-800 dark:text-white mb-3">
-          Panduan Aktivasi Lisensi
+Panduan Aktivasi Lisensi
         </h2>
         <ul
           class="list-decimal list-inside space-y-2 text-sm text-gray-700 dark:text-gray-300"
@@ -504,6 +688,42 @@
         <strong>Perhatian Pengguna iPhone/iPad:</strong><br />
         Apps Biled tidak tersedia di iOS/Safari karena keterbatasan sistem.
       </div>
+
+      <!-- PWA Installation Card -->
+      <section
+        id="pwaInstallCard"
+        class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-xl shadow-lg p-6 mt-8 hidden"
+      >
+        <div class="flex items-center justify-between">
+          <div class="flex-1">
+            <h3 class="text-lg font-bold mb-2 flex items-center">
+              <i class="fas fa-mobile-alt mr-2"></i>
+              Install Lampubiled App
+            </h3>
+            <p class="text-sm opacity-90 mb-4">
+              Install aplikasi ini di perangkat Android Anda untuk pengalaman yang lebih baik dan akses offline.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-3">
+              <button
+                id="mobileInstallBtn"
+                class="bg-white text-indigo-600 hover:bg-gray-100 px-4 py-2 rounded-lg text-sm font-medium transition flex items-center justify-center"
+              >
+                <i class="fas fa-download mr-2"></i>
+                Install Sekarang
+              </button>
+              <button
+                id="dismissInstallCard"
+                class="bg-transparent border border-white/30 hover:bg-white/10 px-4 py-2 rounded-lg text-sm font-medium transition"
+              >
+                Nanti Saja
+              </button>
+            </div>
+          </div>
+          <div class="ml-4 hidden sm:block">
+            <i class="fas fa-download text-3xl opacity-50"></i>
+          </div>
+        </div>
+      </section>
     </main>
 
     <!-- Modal Galeri -->
@@ -527,10 +747,10 @@
         </div>
 
         <!-- Filter kategori -->
-        <div class="mb-4 items-center sm:space-x-2">
+        <div class="mb-4">
           <select
             id="categoryFilter"
-            class="w-full px-3 py-2 mt-2 sm:mt-0 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm text-gray-800 dark:text-white"
+            class="w-full px-3 py-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm text-gray-800 dark:text-white"
           >
             <option value="all">Semua Kategori</option>
             <!-- Categories will be populated here -->

@@ -13,7 +13,10 @@ import {
 } from "./assets/modules/vendor.js";
 
 import "./assets/modules/utils.js";
-import "./assets/modules/gallery.js";
+import("./assets/modules/gallery.js").then((module) => {
+    window.galleryModule = module;
+    console.log("Gallery module loaded successfully");
+  });
 
 const appendLog = window.appendLog || ((msg) => console.log("[LOG]", msg));
 let deferredPrompt = null;
@@ -170,10 +173,11 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // =====================================
-  // FAB: Theme & WhatsApp
+  // FAB: Theme & WhatsApp & Debug & Install
   const fabToggle = document.getElementById("fabToggle");
   const fabWhatsApp = document.getElementById("fabWhatsapp");
   const fabTheme = document.getElementById("fabThemeMode");
+  const fabDebug = document.getElementById("fabDebug");
   const themeIcon = document.getElementById("themeIcon");
 
   let fabOpen = false;
@@ -182,9 +186,16 @@ document.addEventListener("DOMContentLoaded", () => {
     fabOpen = !fabOpen;
     fabWhatsApp?.classList.toggle("hidden", !fabOpen);
     fabTheme?.classList.toggle("hidden", !fabOpen);
+    fabDebug?.classList.toggle("hidden", !fabOpen);
+    installBtn?.classList.toggle("hidden", !fabOpen);
 
     // Ganti ikon Font Awesome
     fabIcon.className = fabOpen ? "fas fa-times" : "fas fa-bars";
+  });
+
+  // Desktop debug FAB
+  fabDebug?.addEventListener("click", () => {
+    document.getElementById("toggleDebugBtn")?.click();
   });
 
   fabTheme?.addEventListener("click", () => {
@@ -192,6 +203,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const isDark = html.classList.toggle("dark");
     themeIcon.className = isDark ? "fas fa-sun" : "fas fa-moon";
     localStorage.setItem("theme", isDark ? "dark" : "light");
+    
+    // Update vendor logo immediately when theme changes
+    const vendorCode = window.currentVendorCode || "GENERIC";
+    updateVendorLogo(vendorCode);
   });
 
   const savedTheme = localStorage.getItem("theme");
@@ -231,6 +246,10 @@ document.addEventListener("DOMContentLoaded", () => {
     uploader?.classList.add("hidden");
   });
 
+  document.getElementById("mobileNavDebug")?.addEventListener("click", () => {
+  document.getElementById("toggleDebugBtn")?.click();
+});
+
   // Theme toggle
   const bottomThemeBtn = document.getElementById("bottomThemeToggle");
   const bottomThemeIcon = document.getElementById("bottomThemeIcon");
@@ -242,6 +261,12 @@ document.addEventListener("DOMContentLoaded", () => {
     bottomThemeIcon.className = isDark
       ? "fas fa-sun text-lg mb-1"
       : "fas fa-moon text-lg mb-1";
+
+    // Update desktop FAB theme icon too
+    const desktopThemeIcon = document.getElementById("themeIcon");
+    if (desktopThemeIcon) {
+      desktopThemeIcon.className = isDark ? "fas fa-sun" : "fas fa-moon";
+    }
 
     // Update logo sesuai tema
     const vendorCode = window.currentVendorCode || "GENERIC";
@@ -256,4 +281,39 @@ document.addEventListener("DOMContentLoaded", () => {
 
 document.addEventListener("DOMContentLoaded", async () => {
   await loadVendorsFromAPI("/vendors.json");
+
+  // =====================================
+  // PWA Installation Card
+  const pwaInstallCard = document.getElementById("pwaInstallCard");
+  const mobileInstallBtn = document.getElementById("mobileInstallBtn");
+  const dismissInstallCard = document.getElementById("dismissInstallCard");
+
+  // Show PWA install card on Android devices when PWA is installable
+  const isAndroid = /android/i.test(navigator.userAgent);
+  const isInStandalone = window.matchMedia("(display-mode: standalone)").matches;
+  
+  if (isAndroid && !isInStandalone && !localStorage.getItem("pwaInstallDismissed")) {
+    // Show card after a small delay
+    setTimeout(() => {
+      pwaInstallCard?.classList.remove("hidden");
+    }, 3000);
+  }
+
+  // Mobile install button
+  mobileInstallBtn?.addEventListener("click", async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      console.log(outcome === "accepted" ? "Install accepted" : "Dismissed");
+      deferredPrompt = null;
+    }
+    pwaInstallCard?.classList.add("hidden");
+  });
+
+  // Dismiss install card
+  dismissInstallCard?.addEventListener("click", () => {
+    pwaInstallCard?.classList.add("hidden");
+    localStorage.setItem("pwaInstallDismissed", "true");
+  });
 });
+

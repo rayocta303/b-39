@@ -60,7 +60,7 @@
     "image": "assets/gif/1.gif",
     "headerLeft": "assets/header/1_a.h",
     "headerRight": "assets/header/1_b.h",
-    "serialNumber": "SN123456789"
+    "serialNumber": "SN1111111"
   },
   {
     "name": "Bendera",
@@ -69,5 +69,21 @@
     "headerLeft": "assets/header/1_a.h",
     "headerRight": "assets/header/1_b.h",
     "vendorCode": "XA1234"
+  },
+  {
+    "name": "Animasi Premium",
+    "category": "premium",
+    "image": "data/1.gif",
+    "headerLeft": "data/1a.h",
+    "headerRight": "data/1b.h",
+    "licenseType": "02"
+  },
+  {
+    "name": "Animasi Eksklusif",
+    "category": "premium",
+    "image": "data/2.gif",
+    "headerLeft": "data/1a.h",
+    "headerRight": "data/1b.h",
+    "licenseType": "03"
   }
 ]

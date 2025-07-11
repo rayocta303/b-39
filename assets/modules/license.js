@@ -1,6 +1,7 @@
 // license.js
 import { sendBLEPayload, readBLEData, appendLog } from "./bleManager.js";
 import { detectVendor, getVendorInfo, updateVendorLogo } from "./vendor.js";
+import { updateUserContext } from "./gallery.js";
 const nameLicense = ["No License", "Basic", "Middle", "Full"];
 
 export async function requestDeviceInfo() {
@@ -63,6 +64,26 @@ export async function requestDeviceInfo() {
         ? `Lisensi : ${nameLicense[tipeLisensi]}`
         : "Lisensi belum aktif"
     );
+
+    // Update gallery context with user information
+    const licenseTypeCode = lisensiValid ? tipeLisensi.toString().padStart(2, '0') : "00";
+    updateUserContext(serial, vendorCode, licenseTypeCode);
+    
+    // Update device debug information
+    if (typeof window.updateDeviceDebugInfo === 'function') {
+      window.updateDeviceDebugInfo({
+        serialNumber: serial,
+        licenseType: licenseTypeCode,
+        licenseName: lisensiValid ? nameLicense[tipeLisensi] : 'No License',
+        vendorCode: vendorCode,
+        vendorName: vendorInfo.name,
+        connected: true,
+        deviceType: jenis === "0" ? "BLE Device" : "Unknown",
+        firmware: "v1.0", // You can get this from device if available
+        lastResponse: response,
+        responseTime: new Date().toLocaleTimeString()
+      });
+    }
   } else {
     appendLog("Jenis data tidak dikenali");
   }

@@ -52,15 +52,16 @@ export function updateVendorLogo(vendorCode) {
   // Set the logo source based on vendor code
   if (vendorCode && vendorCode.toUpperCase() !== "GENERIC") {
     const path = `assets/logo/vendors/${vendorCode.toUpperCase()}.png`;
-    logoEl.src = path;
     logoEl.dataset.lockTheme = "true";
 
-    // Apply effects based on theme
+    // Apply effects immediately based on theme
+    logoEl.classList.remove("invert", "brightness-0"); // Reset first
     if (isDark) {
       logoEl.classList.add("invert", "brightness-0");
-    } else {
-      logoEl.classList.remove("invert", "brightness-0");
     }
+    
+    // Set source after effects are applied
+    logoEl.src = path;
 
     // Handle error loading the vendor logo
     logoEl.onerror = () => {
