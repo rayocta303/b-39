@@ -9,7 +9,7 @@ export async function requestDeviceInfo() {
   const response = await readBLEData();
   if (!response) {
     appendLog("Gagal baca info dari device");
-    return;
+    return; // Exit the function
   }
 
   const jenis = response[0];
@@ -44,8 +44,6 @@ export async function requestDeviceInfo() {
       mobileContactEl.href = vendorInfo.contact;
     }
     // logo vendor
-    //SN123456789+BILED → logo assets/logo/vendors/BILED.png
-    // ABC123+XYZ → logo assets/logo/vendors/XYZ.png
     updateVendorLogo(vendorCode);
 
     // Lisensi UI
