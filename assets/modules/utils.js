@@ -1,3 +1,5 @@
+import { playSound } from "./toast.js";
+
 document.addEventListener("DOMContentLoaded", () => {
   const loader = document.getElementById("loadingScreen");
   setTimeout(() => {
@@ -29,6 +31,8 @@ document.getElementById("fabThemeMode")?.addEventListener("click", () => {
 
 // Container Logo shrink on scroll (mobile only)
 document.addEventListener("DOMContentLoaded", () => {
+  playSound("assets/sounds/welcome_connect.mp3");
+
   const logoSection = document.getElementById("containerLogo");
 
   // Hanya untuk mobile
