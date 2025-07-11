@@ -11,6 +11,15 @@ import {
   updateVendorLogo,
   loadVendorsFromAPI,
 } from "./assets/modules/vendor.js";
+import {
+  setApiEnvironment,
+  getApiEnvironment,
+  setDebugEnabled,
+  setDebugCardEnabled,
+  setCacheEnabled,
+  isCacheEnabled,
+} from "./assets/modules/config.js";
+import { clearAllCache } from "./assets/modules/cache.js";
 
 import "./assets/modules/utils.js";
 import("./assets/modules/gallery.js").then((module) => {
@@ -315,5 +324,96 @@ document.addEventListener("DOMContentLoaded", async () => {
     pwaInstallCard?.classList.add("hidden");
     localStorage.setItem("pwaInstallDismissed", "true");
   });
+
+  // =====================================
+  // Debug Configuration Handlers
+  const apiEnvironmentSelect = document.getElementById("apiEnvironmentSelect");
+  const debugEnabledCheck = document.getElementById("debugEnabledCheck");
+  const debugCardCheck = document.getElementById("debugCardCheck");
+  const cacheEnabledCheck = document.getElementById("cacheEnabledCheck");
+  const clearCacheBtn = document.getElementById("clearCacheBtn");
+  const reloadGalleryBtn = document.getElementById("reloadGalleryBtn");
+
+  // Set initial values
+  if (apiEnvironmentSelect) {
+    apiEnvironmentSelect.value = getApiEnvironment();
+    apiEnvironmentSelect.addEventListener("change", (e) => {
+      setApiEnvironment(e.target.value);
+      showToast(`API Environment changed to ${e.target.value}`, "info");
+    });
+  }
+
+  if (debugEnabledCheck) {
+    debugEnabledCheck.addEventListener("change", (e) => {
+      setDebugEnabled(e.target.checked);
+      showToast(`Debug mode ${e.target.checked ? 'enabled' : 'disabled'}`, "info");
+    });
+  }
+
+  if (debugCardCheck) {
+    debugCardCheck.addEventListener("change", (e) => {
+      setDebugCardEnabled(e.target.checked);
+      showToast(`Debug card ${e.target.checked ? 'shown' : 'hidden'}`, "info");
+    });
+  }
+
+  if (cacheEnabledCheck) {
+    cacheEnabledCheck.checked = isCacheEnabled();
+    cacheEnabledCheck.addEventListener("change", (e) => {
+      setCacheEnabled(e.target.checked);
+      showToast(`Cache ${e.target.checked ? 'enabled' : 'disabled'}`, "info");
+    });
+  }
+
+  if (clearCacheBtn) {
+    clearCacheBtn.addEventListener("click", async () => {
+      try {
+        await clearAllCache();
+        showToast("Cache cleared successfully", "success");
+      } catch (error) {
+        showToast("Failed to clear cache", "error");
+        console.error("Cache clear failed:", error);
+      }
+    });
+  }
+
+  if (reloadGalleryBtn) {
+    reloadGalleryBtn.addEventListener("click", () => {
+      if (window.galleryModule && window.galleryModule.updateUserContext) {
+        // Trigger gallery reload with current context
+        const currentSN = document.getElementById('deviceSerial')?.textContent || '';
+        const currentVendor = document.getElementById('deviceVendor')?.textContent || '';
+        const currentLicense = document.getElementById('deviceLicense')?.textContent || '';
+        
+        window.galleryModule.updateUserContext(currentSN, currentVendor, currentLicense);
+        showToast("Gallery reloaded", "success");
+      } else {
+        showToast("Gallery module not available", "error");
+      }
+    });
+  }
+
+  // Mobile debug button
+  const mobileNavDebug = document.getElementById("mobileNavDebug");
+  const fabDebug = document.getElementById("fabDebug");
+
+  if (mobileNavDebug) {
+    mobileNavDebug.addEventListener("click", () => {
+      const debugSection = document.getElementById("debugInfo");
+      if (debugSection) {
+        debugSection.scrollIntoView({ behavior: "smooth" });
+      }
+    });
+  }
+
+  if (fabDebug) {
+    fabDebug.addEventListener("click", () => {
+      const currentState = debugCardCheck?.checked || false;
+      if (debugCardCheck) {
+        debugCardCheck.checked = !currentState;
+        debugCardCheck.dispatchEvent(new Event('change'));
+      }
+    });
+  }
 });
 

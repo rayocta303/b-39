@@ -1,4 +1,6 @@
 // vendor.js
+import { getApiEndpoint, getApiEnvironment, debugLog } from "./config.js";
+
 /**
  * Ekstrak vendor dari serial number atau kode lisensi
  * Contoh input SN: SN123456789+XYZ
@@ -9,16 +11,31 @@ let vendorLoaded = false;
 
 export async function loadVendorsFromAPI() {
   try {
-    const res = await fetch("./api/vendors.json");
-    const data = await res.json();
+    const apiUrl = getApiEndpoint('vendors');
+    debugLog('api', 'Loading vendors from:', apiUrl);
+    
+    const res = await fetch(apiUrl);
+    if (!res.ok) throw new Error(`Failed to load vendors: ${res.status}`);
+    
+    const responseData = await res.json();
+    debugLog('api', 'Vendors API response:', responseData);
+    
+    let data;
+    if (getApiEnvironment() === 'production' && responseData.success) {
+      data = responseData.data;
+    } else {
+      data = responseData;
+    }
 
     if (Array.isArray(data)) {
       VENDORS = data;
       vendorLoaded = true;
+      debugLog('api', 'Vendors loaded successfully', { count: VENDORS.length });
     } else {
       console.warn("Vendor data tidak valid");
     }
   } catch (err) {
+    debugLog('api', 'Failed to load vendors:', err);
     console.error("Gagal fetch vendor data:", err);
   }
 }

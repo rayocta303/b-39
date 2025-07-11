@@ -1,6 +1,13 @@
 // gallery.js
 import { appendLog } from "./bleManager.js";
-import { isCacheEnabled } from "./config.js";
+import { 
+  isCacheEnabled, 
+  getApiEndpoint, 
+  getApiEnvironment, 
+  isDebugEnabled, 
+  isDebugCardEnabled,
+  debugLog 
+} from "./config.js";
 import { getCachedAnimation, getCachedHeader, preloadAssets } from "./cache.js";
 
 window.selectedGifMeta = null; // Metadata global animasi terpilih
@@ -69,30 +76,138 @@ export function updateUserContext(serialNumber, vendorCode, licenseType) {
   renderGallery("all");
 
   appendLog(`Context updated: SN=${currentSerialNumber}, Vendor=${currentVendorCode}, License=${currentLicenseType}`);
+  
+  // Reload gallery with new context filters
+  const filters = {
+    sn: currentSerialNumber,
+    license: currentLicenseType,
+    vendor: currentVendorCode
+  };
+  
+  if (getApiEnvironment() === 'production') {
+    loadGalleryData(filters);
+  }
 }
 
-async function loadGalleryData() {
+/**
+ * Build API URL with filters for PHP endpoints
+ */
+function buildApiUrl(endpoint, filters = {}) {
+  const baseUrl = getApiEndpoint(endpoint);
+  
+  if (getApiEnvironment() === 'development') {
+    return baseUrl; // JSON files don't support filters
+  }
+  
+  // Build query string for PHP API
+  const params = new URLSearchParams();
+  
+  if (filters.sn) params.append('sn', filters.sn);
+  if (filters.license) params.append('license', filters.license);
+  if (filters.vendor) params.append('vendor', filters.vendor);
+  if (filters.category) params.append('category', filters.category);
+  if (isDebugEnabled()) params.append('debug', 'true');
+  
+  const queryString = params.toString();
+  return queryString ? `${baseUrl}?${queryString}` : baseUrl;
+}
+
+/**
+ * Update debug card with current information
+ */
+function updateDebugCard(info) {
+  if (!isDebugCardEnabled()) return;
+  
+  const debugCard = document.getElementById('debugCard');
+  if (!debugCard) return;
+  
+  const timestamp = new Date().toLocaleTimeString();
+  
+  let debugHtml = `
+    <div class="debug-header">
+      <h4>Debug Info (${timestamp})</h4>
+      <small>Environment: ${getApiEnvironment()}</small>
+    </div>
+    <div class="debug-content">
+      <div><strong>Source:</strong> ${info.source}</div>
+  `;
+  
+  if (info.data) {
+    debugHtml += `<div><strong>Items:</strong> ${Array.isArray(info.data) ? info.data.length : 'N/A'}</div>`;
+  }
+  
+  if (info.categories) {
+    debugHtml += `<div><strong>Categories:</strong> ${info.categories.join(', ')}</div>`;
+  }
+  
+  if (info.debug) {
+    debugHtml += `
+      <div><strong>Query Params:</strong></div>
+      <div class="debug-params">
+        ${Object.entries(info.debug.query_params || {}).map(([key, value]) => 
+          `<span>${key}: ${value || 'none'}</span>`
+        ).join('<br>')}
+      </div>
+    `;
+  }
+  
+  if (info.error) {
+    debugHtml += `<div class="debug-error"><strong>Error:</strong> ${info.error}</div>`;
+  }
+  
+  debugHtml += '</div>';
+  
+  debugCard.innerHTML = debugHtml;
+}
+
+async function loadGalleryData(filters = {}) {
   try {
     // Show skeleton loader
     showSkeletonLoader();
     
-    // Check cache first
-    const cachedData = cacheStore.get('gallery', 'main');
-    if (cachedData) {
+    // Build API URL with filters
+    const apiUrl = buildApiUrl('gallery', filters);
+    debugLog('api', 'Loading gallery data from:', apiUrl);
+    
+    // Check cache first for basic gallery data (no filters)
+    const cacheKey = Object.keys(filters).length === 0 ? 'main' : JSON.stringify(filters);
+    const cachedData = cacheStore.get('gallery', cacheKey);
+    
+    if (cachedData && Object.keys(filters).length === 0) {
       galleryData = cachedData;
       loadCategories();
       renderGallery("all");
       hideSkeletonLoader();
+      debugLog('cache', 'Gallery loaded from cache');
       appendLog("Gallery loaded from cache");
+      updateDebugCard({ source: 'cache', data: galleryData });
       return;
     }
     
-    const res = await fetch("./api/gallery.json");
-    if (!res.ok) throw new Error("Gagal memuat galeri");
-    galleryData = await res.json();
+    const res = await fetch(apiUrl);
+    if (!res.ok) throw new Error(`Failed to load gallery: ${res.status}`);
     
-    // Cache the data
-    cacheStore.set('gallery', 'main', galleryData);
+    const responseData = await res.json();
+    debugLog('api', 'Gallery API response:', responseData);
+    
+    // Handle different response formats
+    if (getApiEnvironment() === 'production' && responseData.success) {
+      galleryData = responseData.data;
+      updateDebugCard({ 
+        source: 'api-php', 
+        data: galleryData, 
+        debug: responseData.debug,
+        categories: responseData.categories 
+      });
+    } else {
+      galleryData = responseData;
+      updateDebugCard({ source: 'api-json', data: galleryData });
+    }
+    
+    // Cache the data only if no filters applied
+    if (Object.keys(filters).length === 0) {
+      cacheStore.set('gallery', 'main', galleryData);
+    }
 
     // Load categories and render gallery
     loadCategories();
@@ -105,9 +220,14 @@ async function loadGalleryData() {
         console.warn("Asset preloading failed:", err)
       );
     }
+    
+    debugLog('api', 'Gallery data loaded successfully', { count: galleryData.length });
+    
   } catch (err) {
     hideSkeletonLoader();
+    debugLog('api', 'Gallery loading failed:', err);
     appendLog("Gagal mengambil galeri: " + err.message);
+    updateDebugCard({ source: 'error', error: err.message });
   }
 }
 

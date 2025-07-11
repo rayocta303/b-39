@@ -475,6 +475,62 @@
               </p>
             </div>
           </div>
+
+          <!-- Debug Configuration -->
+          <div>
+            <h3 class="font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center">
+              <i class="fas fa-cog mr-2"></i>
+              Debug Configuration
+            </h3>
+            <div class="bg-white dark:bg-gray-700 p-3 rounded border text-sm space-y-3">
+              <!-- Environment Selection -->
+              <div>
+                <label class="block font-medium text-gray-600 dark:text-gray-400 mb-1">
+                  API Environment:
+                </label>
+                <select id="apiEnvironmentSelect" class="w-full p-2 border rounded dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                  <option value="development">Development (JSON)</option>
+                  <option value="production">Production (PHP)</option>
+                </select>
+              </div>
+              
+              <!-- Debug Options -->
+              <div class="space-y-2">
+                <label class="flex items-center">
+                  <input type="checkbox" id="debugEnabledCheck" class="mr-2">
+                  <span class="text-gray-700 dark:text-gray-300">Enable Debug Mode</span>
+                </label>
+                <label class="flex items-center">
+                  <input type="checkbox" id="debugCardCheck" class="mr-2">
+                  <span class="text-gray-700 dark:text-gray-300">Show Debug Card</span>
+                </label>
+                <label class="flex items-center">
+                  <input type="checkbox" id="cacheEnabledCheck" class="mr-2" checked>
+                  <span class="text-gray-700 dark:text-gray-300">Enable Caching</span>
+                </label>
+              </div>
+              
+              <!-- Actions -->
+              <div class="flex gap-2 pt-2">
+                <button id="clearCacheBtn" class="px-3 py-1 bg-red-500 text-white rounded text-xs hover:bg-red-600">
+                  Clear Cache
+                </button>
+                <button id="reloadGalleryBtn" class="px-3 py-1 bg-blue-500 text-white rounded text-xs hover:bg-blue-600">
+                  Reload Gallery
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Debug Card -->
+          <div id="debugCard" class="hidden bg-yellow-50 dark:bg-yellow-900 border border-yellow-200 dark:border-yellow-700 rounded p-3 text-xs">
+            <div class="debug-header">
+              <h4 class="font-semibold text-yellow-800 dark:text-yellow-200">Debug Info</h4>
+            </div>
+            <div class="debug-content text-yellow-700 dark:text-yellow-300">
+              Debug card is ready...
+            </div>
+          </div>
         </div>
       </section>
 
