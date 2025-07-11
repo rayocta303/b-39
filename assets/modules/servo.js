@@ -18,6 +18,7 @@ export async function setServo(min, max, side = "L") {
     appendLog(`Servo ${side} diset ke ${min}-${max}`);
     showToast(`Servo ${side} diset ke ${min}-${max}`, "success");
     playSound("assets/sounds/success.mp3");
+    playSound("assets/sounds/servo.mp3");
   } catch (err) {
     console.error("[servo.js] Gagal kirim BLE:", err);
     showToast("Gagal kirim perintah servo", "error");
