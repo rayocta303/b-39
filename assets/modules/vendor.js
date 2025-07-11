@@ -7,9 +7,9 @@
 let VENDORS = []; // akan diisi dari API
 let vendorLoaded = false;
 
-export async function loadVendorsFromAPI(url = "./api/vendors.json") {
+export async function loadVendorsFromAPI() {
   try {
-    const res = await fetch(url);
+    const res = await fetch("./api/vendors.json");
     const data = await res.json();
 
     if (Array.isArray(data)) {
@@ -49,29 +49,32 @@ export function updateVendorLogo(vendorCode) {
 
   const isDark = document.documentElement.classList.contains("dark");
 
+  // Set the logo source based on vendor code
   if (vendorCode && vendorCode.toUpperCase() !== "GENERIC") {
     const path = `assets/logo/vendors/${vendorCode.toUpperCase()}.png`;
     logoEl.src = path;
     logoEl.dataset.lockTheme = "true";
 
-    // Terapkan efek putih saat dark mode
+    // Apply effects based on theme
     if (isDark) {
       logoEl.classList.add("invert", "brightness-0");
     } else {
       logoEl.classList.remove("invert", "brightness-0");
     }
 
+    // Handle error loading the vendor logo
     logoEl.onerror = () => {
-      logoEl.onerror = null;
-      logoEl.src = `assets/logo/vendors/GENERIC.png`;
-      logoEl.dataset.lockTheme = "false";
-      logoEl.classList.remove("invert", "brightness-0");
+      logoEl.onerror = null; // Remove the error handler to prevent infinite loop
+      logoEl.src = `assets/logo/vendors/GENERIC.png`; // Fallback to generic logo
+      logoEl.dataset.lockTheme = "false"; // Reset theme lock
+      logoEl.classList.remove("invert", "brightness-0"); // Remove theme effects
     };
   } else {
-    // GENERIC ikut tema dan tanpa filter
-    logoEl.dataset.lockTheme = "false";
-    logoEl.classList.remove("invert", "brightness-0");
+    // For GENERIC logo, apply theme based on current mode
+    logoEl.dataset.lockTheme = "false"; // Reset theme lock
+    logoEl.classList.remove("invert", "brightness-0"); // Remove theme effects
 
+    // Set the logo source based on the current theme
     logoEl.src = isDark
       ? "assets/logo/logo-dark.png"
       : "assets/logo/logo-light.png";
